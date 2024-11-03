@@ -1,0 +1,28 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Top part with welcome text -->
+        <div class="welcome-container">
+            <h1>WELCOME TO WASTE MANAGEMENT PLATFORM</h1>
+        </div>
+
+        <!-- Bottom part with login form -->
+        <div class="form-container">
+            <h2>Login to Dashboard</h2>
+            <form action="{{ url_for('login') }}" method="POST">
+                <label for="email">Email:</label>
+                <input type="email" name="email" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
+                
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a></p>
+        </div>
+    </div>
+</body>
+</html>

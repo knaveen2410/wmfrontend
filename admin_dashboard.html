@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .custom-complaint {
+            overflow: hidden;      
+            text-overflow: ellipsis; 
+            white-space: normal; /* Allows text to wrap */
+            max-width: 200px; /* Adjust based on your layout */
+        }
+    </style>
+</head>
+<body>
+    <h2 class="centered-heading">Welcome to Admin Dashboard</h2>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+
+        <h3 class="text-center">Complaints</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Issue Type</th>
+                    <th class="custom-complaint">Custom Complaint</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                    <tr>
+                        <td>{{ complaint['id'] }}</td>
+                        <td>{{ complaint['name'] }}</td>
+                        <td>{{ complaint['issue_type'] }}</td>
+                        <td class="custom-complaint">{{ complaint['custom_complaint'] }}</td>
+                        <td>{{ complaint['address'] }}</td>
+                        <td>{{ complaint['status'] }}</td>
+                        <td>
+                            <form method="POST" class="form-inline">
+                                <input type="hidden" name="complaint_id" value="{{ complaint['id'] }}">
+                                <select name="status" class="form-control mr-2">
+                                    <option value="Under Review" {% if complaint['status'] == 'Under Review' %}selected{% endif %}>Under Review</option>
+                                    <option value="In Progress" {% if complaint['status'] == 'In Progress' %}selected{% endif %}>In Progress</option> 
+                                    <option value="Resolved" {% if complaint['status'] == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                </select>
+                                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">No complaints found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info mt-3">
+                {% for message in messages %}
+                    {{ message }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
